@@ -2,6 +2,8 @@
 # 이 파일을 ai-dlc.yaml로 복사한 뒤 프로젝트에 맞게 수정한다.
 # 설정 키 이름은 유지하고, [변경 필요] 항목은 교체하며 [확인 필요] 항목은 실제 환경과 대조한다.
 # 작업 절차와 승인 권한은 AGENTS.md를 따른다.
+# 일반 개발 사이클에서는 이 예시와 실제 ai-dlc.yaml을 수정하지 않는다.
+# 설정·운영 파일 변경은 사용자 승인을 받은 별도 AI-DLC 유지보수에서만 수행한다.
 
 schema_version: 2
 
@@ -17,7 +19,8 @@ services:
 
     # GitHub 저장소
     repositories:
-      # 공식 요구사항·API·ERD·UI 명세를 관리하는 저장소
+      # 공식 요구사항·API·인증/인가·ERD·UI 명세를 읽기 전용으로 참조하는 Specs 저장소
+      # 일반 개발에서는 원본을 수정하지 않으며 변경은 별도 계약 관리 절차를 따른다.
       common:
         enabled: true
         # [변경 필요] 예: marcel615/Ask-Teacher-specs
@@ -99,23 +102,34 @@ services:
         medium: 'priority: medium'
         low: 'priority: low'
 
-    # 공식 요구사항
+    # 공식 요구사항: 아래 repository_role이 가리키는 Specs 저장소에서 읽기 전용 참조
     requirements:
-      # [확인 필요] repositories의 저장소 역할
-      # common: Specs / frontend: Frontend / backend: Backend
+      # [확인 필요] repositories에서 실제 Specs 저장소를 가리키는 역할
+      # 역할 키는 연결용이며 수정 권한을 부여하지 않는다.
       repository_role: common
 
       # [확인 필요] 해당 저장소에서의 실제 문서 경로
       path: docs/requirements.md
       format: markdown
 
-    # 공식 API·DB·UI 계약
+    # 공식 API·DB·UI 계약: Specs 저장소의 원본은 일반 개발·AI-DLC 유지보수에서 수정 금지
+    # 변경 필요성은 기존 계약으로 구현할 대안을 먼저 검토하고 Main이 사용자에게 보고한다.
+    # 관련 Issue·PR에 검토 근거·변경 사유·영향·수정안을 남기며 기존 Issue 수정 승인을 따른다.
     contracts:
       api:
-        # [확인 필요] API 명세 저장소 역할과 파일 경로
+        # [확인 필요] API 계약 원본 확인. 별도 authentication이 없을 때만 이 문서의 공식 인증 참조 사용
+        # 아래 저장소 역할과 파일 경로는 실제 Specs 저장소를 가리켜야 한다.
         repository_role: common
         path: docs/api-spec.md
         format: markdown
+
+      # [선택] 인증/인가 계약이 별도 문서로 관리될 때만 실제 값으로 설정한다.
+      # 설정 시 이 항목의 원본을 api와 함께 읽기 전용으로 확인한다.
+      # 설정된 원본의 확인 실패·계약 간 충돌은 API 문서로 대체하지 않고 중단해 보고한다.
+      # authentication:
+      #   repository_role: common
+      #   path: docs/authentication.md
+      #   format: markdown
 
       erd:
         # [확인 필요] ERD 저장소 역할과 파일 경로

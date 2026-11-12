@@ -19,6 +19,15 @@
 - 예외: 이번 Issue의 작업 브랜치는 PR merge와 미반영 커밋·변경이 없음을 확인한 경우 별도 승인 없이 정리할 수 있다. 확인할 수 없으면 중단한다. 실행 환경의 권한 정책은 별도로 따른다.
 - 최소한의 변경을 하고, 이 문서의 가독성 기준과 일치하는 기존 프로젝트 구조·구현 패턴을 우선 활용한다.
 
+## 공식 계약과 AI-DLC 운영 파일의 수정 권한
+
+- 공식 요구사항·API·인증/인가·ERD·UI 등 계약 명세는 `ai-dlc.example.yaml`의 연결 구조를 실제 프로젝트에 적용한 `ai-dlc.yaml`의 활성 서비스 설정에 따라 Specs 저장소에서 읽기 전용으로 참조한다. `requirements`와 `contracts`의 `repository_role`이 가리키는 저장소·기준 브랜치·경로를 사용하고, 인증/인가 계약은 `contracts.authentication`이 설정되어 있으면 해당 항목의 `repository_role`·`path` 및 연결된 저장소의 `repository`·`default_branch`로 지정한 원본을 API 계약과 함께 확인한다. 별도 항목이 없을 때는 `contracts.api`의 공식 문서와 그 문서의 공식 인증 참조를 확인한다. 설정된 인증 계약을 확인할 수 없거나 계약 간 충돌이 있으면 임의로 대체하지 않고 중단해 보고한다. 예시 값으로 실제 저장소를 추측하지 않는다.
+- 일반 개발 사이클에서는 공식 계약 원본을 직접 수정하지 않는다. 로컬 복사본·요약을 고쳐 공식 계약 변경을 대신하지 않으며, Frontend에는 작업별 요약과 원본 링크만 둔다. 공식 계약 변경은 개발 사이클과 분리된 계약 관리 절차에서만 수행한다. 기능 구현 승인이나 AI-DLC 유지보수 승인은 공식 계약 수정 권한이 아니다.
+- `AGENTS.md`, Skill 정의, Agent 설정, `ai-dlc.example.yaml`·`ai-dlc.yaml`, 빠른 지시문·리뷰 기준 등 운영 절차 문서(README.md 제외)와 Issue/PR·기록 템플릿은 AI-DLC 운영 파일이다. 일반 기능 개발·버그 수정·리뷰 대응 중에는 수정하지 않는다. 사용자에게 목적·대상·영향을 보고하고 승인받은 별도 AI-DLC 유지보수 작업에서만 승인 범위 안의 운영 파일을 수정한다. 유지보수에도 기존 승인 조건·품질 게이트·실행 환경 권한을 적용하며, 일반 개발을 임의로 유지보수로 전환하지 않는다.
+- `README.md`는 위 운영 파일 수정 금지 대상에서 제외한다. 일반 개발 사이클에서도 승인된 작업 범위 안에서 수정할 수 있다. README 수정으로 공식 계약·운영 규칙이나 기존 승인 조건을 변경할 수는 없다.
+- `docs/current-task.md`, `docs/current-work-log.md`, `docs/devlog/YYYY-MM.md`와 각 Skill이 명시한 상태 파일은 기존 역할·책임·승인 범위 안에서 수정할 수 있다. 설계의 Main 승인, 이전 devlog 확인, append-only 등 기존 조건을 유지한다. 이 예외는 기록·상태 내용에만 적용하며 Skill 정의·템플릿·운영 규칙을 바꾸는 권한이 아니다.
+- 개발 중 계약 변경 필요성을 발견하면 먼저 기존 공식 계약에 맞춰 승인된 요구사항을 구현할 수 있는지 검토한다. Main은 검토 근거와 대안, 변경 사유·영향 범위·수정안을 사용자에게 보고하고 관련 Issue·PR에 기록한다. Issue 생성·수정의 기존 승인 조건은 유지하며, 수정 승인이 필요하면 기록안을 보고하고 승인 후 반영한다. 계약 변경 없이는 구현할 수 없는 부분은 보류하고, 별도 계약 관리 절차의 결과와 공식 원본 반영을 확인한 뒤 설계 게이트를 다시 판단한다. 세부 절차는 issue-driven-dev의 계약 변경 대응을 따른다.
+
 ## 코드 가독성과 구성
 
 - 실제 요구사항을 충족하는 이해하기 쉬운 구현을 우선한다. 성능이나 이론적으로 더 강력한 해법을 위해 불필요한 추상화·방어 로직·설정을 먼저 추가하지 않는다. 필요한 보안·정확성·동시성 보장은 유지한다.
@@ -41,7 +50,7 @@
 - 상세 워크플로우: `.agents/skills/issue-driven-dev/SKILL.md`
 - 빠른 지시문: `docs/prompts/quick.md`
 - Issue 템플릿: `.github/ISSUE_TEMPLATE/feature_request.yml`
-- 공통 명세 공식 원본: 설정의 `requirements`, `contracts.api`, `contracts.erd`, `contracts.ui`와 각각의 `repository_role`을 따른다. Frontend에는 원문을 복사하지 않고 작업별 요약과 원본 링크만 둔다.
+- 공통 명세 공식 원본: 설정의 `requirements`, `contracts.api`, `contracts.authentication`(설정된 경우), `contracts.erd`, `contracts.ui`와 각각의 `repository_role`을 따라 Specs 저장소에서 읽기 전용으로 참조한다. Frontend에는 원문을 복사하지 않고 작업별 요약과 원본 링크만 둔다.
 - 현재 작업 범위: `docs/current-task.md`
 - 역할 설정: `.codex/agents/`의 Architect·Builder·Reporter. Main은 이 문서와 issue-driven-dev에서 정의한다.
 - 리뷰 기준: `docs/review-checklist.md`
