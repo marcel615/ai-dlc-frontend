@@ -32,6 +32,13 @@
 | 사용자 동의만 있고 공식 원본 미반영 | Skill 계약 대응 5와 Builder: 공식 반영 확인과 설계 게이트 재판단 전 의존 부분 구현 금지 | 일치 |
 | 별도 계약 관리 후 재개 | 공식 원본 읽기 전용 확인, 사용자 결정·설계·범위·검증 재검토 및 기존 DB·인증/인가 승인 조건 유지 | 일치 |
 
+### PR 생성과 기록 반영
+
+- [PR #1](https://github.com/marcel615/ai-dlc-frontend/pull/1)을 생성했다. 연결 도구의 PR 생성은 통합 권한 부족(403)으로 실패했고 기존 인증된 GitHub CLI로 중복 PR 없음을 확인한 후 생성했다.
+- 구현 커밋: `95008e9f84727566d48d332872e8b16a1a60eff3`. PR은 OPEN, `main` 대상, 충돌 없음(MERGEABLE/CLEAN), 리뷰 0개, check run·commit status 0개로 확인했다. legacy combined status의 `pending`은 항목 0개인 응답이며 실행 중인 CI가 확인됐다는 의미로 기록하지 않는다.
+- `main`은 active Ruleset으로 PR·삭제 방지·non-fast-forward 방지를 요구한다. 필수 승인 리뷰 수는 0이고 필수 status check 규칙은 없다. classic branch protection API는 404였으나 실제 branch rules API에서 Ruleset을 확인했다.
+- 이번 작업의 devlog는 `docs/devlog/2026-11.md`에 신규 작성했다. 기록 커밋·push 후 최종 head의 CI·리뷰·보호조건·충돌을 다시 확인하고 대화 및 PR에 보고한다. 사용자 merge는 수행하지 않는다.
+
 ## 기록 원칙
 
 - 실제 수행한 작업과 확인된 결과만 기록한다.
