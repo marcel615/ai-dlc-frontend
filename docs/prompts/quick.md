@@ -1,6 +1,6 @@
 # Quick Prompts
 
-상세 절차와 승인 경계는 `.agents/skills/issue-driven-dev/SKILL.md`와 `AGENTS.md`를 따른다.
+상세 절차와 승인 경계는 공통 루트의 `.agents/skills/issue-driven-dev/SKILL.md`와 `AGENTS.md`를 따른다. 프로젝트 이름은 공통 루트의 `projects.local.yaml`에서 식별하고 대상 루트의 `ai-dlc.yaml`을 읽는다. 이름이 없거나 중복되면 사용자에게 묻는다.
 아래 문구는 예시이며 같은 뜻의 자연스러운 지시도 사용할 수 있다.
 공통 명세는 `ai-dlc.yaml`의 활성 서비스 `requirements`, `contracts.api`, `contracts.authentication`(설정된 경우), `contracts.erd`, `contracts.ui`가 지정한 Specs 저장소의 공식 원본을 읽기 전용으로 확인한다.
 Main은 품질 게이트를 확인하고 승인된 Issue 범위에서 진행한다.
@@ -9,8 +9,8 @@ Main은 품질 게이트를 확인하고 승인된 Issue 범위에서 진행한�
 
 ## Issue와 설계
 
-- 시작: `Issue #번호 작업 시작해.`
-- 다음 Issue 선정: `작업 시작해. 다음 Issue를 확인해줘.`
+- 프로젝트 작업 시작: `Ask-Teacher 프로젝트 작업 시작하자.`
+- 시작: `Ask-Teacher 프로젝트 Issue #번호 작업 시작해.`
 - 기능 후보: `이 아이디어를 GitHub Project의 승인 대기 후보로 추가해줘.`
 - 백로그 정제: `승인한 기능 후보의 백로그를 정제해.` (조건을 충족한 승인된 Draft는 별도 전환 승인 없이 최대 2개를 정식 Issue로 전환한다.)
 - Issue 초안 승인: `Issue 초안을 승인하고 GitHub에 등록해.`
