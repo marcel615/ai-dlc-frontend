@@ -1,0 +1,7 @@
+# projects.local.yaml로 복사해 프로젝트 정보와 절대 경로를 입력한다.
+# 이 파일과 로컬 등록에 비밀값을 넣지 않는다.
+projects:
+  - name: Example Project
+    aliases:
+      - Example
+    path: "<프로젝트_절대_경로>"

@@ -7,6 +7,8 @@ description: 사용자의 작업 시작 지시에 따라 GitHub Issue를 선정�
 
 공통 권한·예외는 `AGENTS.md`를 따른다. Main은 한 번에 한 Issue를 조율하고 Architect → Builder → Architect 리뷰 → Reporter를 순차 호출한다. Main은 이 스킬을 읽고 각 인계에 Issue, 작업·필수 규칙, 승인 범위와 금지 행동, 관련 파일, 직전 결과와 기대 산출물을 전달한다. Subagent는 필요한 문서만 확인하고 작업이나 범위가 불명확하면 Main에게 확인한다. 같은 파일을 동시에 수정하지 않는다. 사용자 정의 역할을 호출할 수 없거나 결과를 받지 못하면 중단하고 보고한다.
 
+시작 전 공통 운영 루트의 `AGENTS.md`에 따라 프로젝트를 식별하고 대상 루트의 `ai-dlc.yaml`을 확인한다. 이 스킬의 상대 경로 중 Skill·Agent·리뷰 기준은 공통 루트, 프로젝트 설정·소스·기록·Git·검증은 대상 루트 기준이다. Issue·PR 템플릿은 대상 것을 우선하고 없으면 공통 템플릿을 참고한다. Main은 하위 에이전트에 공통 루트·대상 루트·설정 파일의 절대 경로와 승인 범위를 전달한다. 식별이나 경로 검증에 실패하면 중단하고 사용자에게 확인한다.
+
 ## 공통 명세
 
 공식 원본은 `ai-dlc.yaml`의 활성 서비스 `requirements`, `contracts.api`, `contracts.authentication`(설정된 경우), `contracts.erd`, `contracts.ui`와 각각의 `repository_role`을 따라 Specs 저장소에서 읽기 전용으로 확인한다. 인증 계약은 별도 `contracts.authentication`이 설정된 경우 그 항목의 원본을 API와 함께 확인하고, 미설정 시에만 API 문서의 공식 인증 참조를 따른다. 설정된 원본의 확인 실패나 계약 간 충돌은 임의로 대체하지 않고 중단해 보고한다. Frontend에는 원문을 복사하지 않고 Issue 관련 요약과 원본 링크를 둔다. 공식 계약·AI-DLC 운영 파일의 수정 제한과 작업 기록·Skill 상태 파일 예외는 `AGENTS.md`를 따른다. 일반 개발 승인과 별도 AI-DLC 유지보수 승인은 공식 계약 수정 권한을 부여하지 않는다.
