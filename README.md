@@ -116,12 +116,13 @@ Codex에서 대상 Frontend 프로젝트를 열고 `docs/prompts/quick.md`를 �
 
 ## 수정 권한과 계약 변경 대응
 
-일반 기능 개발에서는 공식 계약과 AI-DLC 운영 파일을 수정하지 않는다. 공식 원본은 `ai-dlc.example.yaml`의 연결 구조에 따라 실제 `ai-dlc.yaml`에 지정한 Specs 저장소에서 읽는다. 인증/인가 계약은 `contracts.api`의 공식 문서와 그 문서의 공식 참조를 확인한다.
+일반 기능 개발에서는 공식 계약과 AI-DLC 운영 파일을 수정하지 않는다. 공식 원본은 `ai-dlc.example.yaml`의 연결 구조에 따라 실제 `ai-dlc.yaml`에 지정한 Specs 저장소에서 읽는다. 인증/인가 계약은 별도 `contracts.authentication`이 설정되면 해당 항목의 `repository_role`·`path`와 연결된 저장소의 `repository`·`default_branch`가 지정한 원본을 API 계약과 함께 확인한다. 별도 항목이 없을 때만 `contracts.api` 문서의 공식 인증 참조를 따른다. 설정된 원본을 확인할 수 없거나 계약 간 충돌이 있으면 임의로 대체하지 않고 중단해 보고한다.
 
 | 대상 | 일반 개발 사이클 | 변경 절차 |
 | --- | --- | --- |
 | 공식 요구사항·API·인증/인가·ERD·UI 계약 | 읽기 전용 | 별도 계약 관리 절차 |
-| AGENTS·Skill·Agent·설정·운영 문서·템플릿 | 수정 금지 | 목적·대상·영향에 대한 사용자 승인을 받은 별도 AI-DLC 유지보수 |
+| AGENTS·Skill·Agent·설정·운영 문서·템플릿(README.md 제외) | 수정 금지 | 목적·대상·영향에 대한 사용자 승인을 받은 별도 AI-DLC 유지보수 |
+| README.md | 승인된 작업 범위에서 수정 가능 | 공식 계약·운영 규칙·승인 조건 변경 수단으로 사용하지 않음 |
 | 현재 설계·작업 로그·월별 devlog·Skill이 명시한 상태 파일 | 기존 역할·책임·승인 범위에서 수정 가능 | Main 설계 승인·append-only 등 기존 조건 유지 |
 
 계약 변경이 필요해 보이면 기존 계약으로 승인된 요구사항을 구현할 수 있는지 먼저 검토한다. Main은 대안 검토 근거, 변경 사유·영향 범위·수정안을 사용자에게 보고하고 관련 Issue·PR에 기록한다. 기존 Issue 수정 승인 조건은 유지한다. 계약 변경에 의존하는 부분은 보류하고 별도 계약 관리 절차의 공식 원본 반영을 확인한 뒤 설계 게이트를 다시 판단한다. 기능 구현이나 AI-DLC 유지보수 승인만으로 계약을 수정하지 않는다.
@@ -129,6 +130,8 @@ Codex에서 대상 Frontend 프로젝트를 열고 `docs/prompts/quick.md`를 �
 권한의 기준은 `AGENTS.md`, 상세 대응 절차는 `.agents/skills/issue-driven-dev/SKILL.md`를 따른다.
 
 ## 공통 AI-DLC 업데이트
+
+이 공통 원본 저장소의 `docs/current-task.md`와 `docs/current-work-log.md`는 새 프로젝트에 복사할 초기 템플릿으로 유지하며, 공통 원본의 유지보수 이력은 PR에 기록한다. 적용된 서비스 프로젝트의 월별 devlog와 Reporter 기록 절차는 그대로 유지한다.
 
 이 저장소를 수정해도 이미 적용한 프로젝트에 변경 사항이 자동 반영되지는 않는다.
 

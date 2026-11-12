@@ -2,10 +2,10 @@
 
 상세 절차와 승인 경계는 `.agents/skills/issue-driven-dev/SKILL.md`와 `AGENTS.md`를 따른다.
 아래 문구는 예시이며 같은 뜻의 자연스러운 지시도 사용할 수 있다.
-공통 명세는 `ai-dlc.yaml`의 활성 서비스 `requirements`, `contracts.api`(인증/인가 포함), `contracts.erd`, `contracts.ui`가 지정한 Specs 저장소의 공식 원본을 읽기 전용으로 확인한다.
+공통 명세는 `ai-dlc.yaml`의 활성 서비스 `requirements`, `contracts.api`, `contracts.authentication`(설정된 경우), `contracts.erd`, `contracts.ui`가 지정한 Specs 저장소의 공식 원본을 읽기 전용으로 확인한다.
 Main은 품질 게이트를 확인하고 승인된 Issue 범위에서 진행한다.
 사용자 판단이 필요한 상황과 PR merge는 사용자에게 남긴다.
-일반 개발에서는 공식 계약과 AI-DLC 운영 파일을 수정하지 않는다. 현재 설계·작업 기록·Skill별 상태 파일은 기존 책임과 승인 범위에서 수정한다.
+일반 개발에서는 공식 계약과 AI-DLC 운영 파일(README.md 제외)을 수정하지 않는다. README.md는 승인된 작업 범위 안에서 수정할 수 있다. 인증 계약의 별도 설정 여부와 확인 실패·충돌 시 처리는 AGENTS.md를 따른다. 현재 설계·작업 기록·Skill별 상태 파일은 기존 책임과 승인 범위에서 수정한다.
 
 ## Issue와 설계
 
