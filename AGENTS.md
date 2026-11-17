@@ -2,13 +2,13 @@
 
 ## 프로젝트 설정
 
-- 작업 시작 시 아래 절차로 확인한 대상 프로젝트 루트의 `ai-dlc.yaml`에서 `active_service`에 해당하는 `services` 항목을 읽는다. 저장소·Project·명세·브랜치·검증 값은 해당 설정을 사용한다. 운영 문서의 상태·필드·라벨 이름은 역할을 나타내며 실제 값은 설정의 `project`와 `labels`에서 확인한다. 명세 URL은 해당 항목의 `repository_role`이 가리키는 저장소의 `repository`, `default_branch`, `path`로 구성한다. 설정은 연결 데이터이며 이 문서의 역할·권한·승인 조건을 변경하지 않는다. 설정이 없거나 불명확하면 추측하지 않고 중단한다.
+- 작업 시작 시 아래 절차로 확인한 대상 프로젝트 루트의 `ai-dlc.yaml`에서 `active_service`에 해당하는 `services` 항목을 읽는다. 저장소·작업 추적·명세·브랜치·검증 값은 해당 설정을 사용한다. 운영 문서의 상태·필드·라벨 이름은 역할을 나타내며 실제 값은 선택된 추적 제공자의 설정에서 확인한다. 명세 URL은 해당 항목의 `repository_role`이 가리키는 저장소의 `repository`, `default_branch`, `path`로 구성한다. 설정은 연결 데이터이며 이 문서의 역할·권한·승인 조건을 변경하지 않는다. 설정이 없거나 불명확하면 추측하지 않고 중단한다.
 
 ## 프로젝트 식별과 경로
 
 - 이 저장소를 공통 운영 루트로 열고 사용자 요청의 프로젝트 이름을 `projects.local.yaml`의 `name` 또는 `aliases`와 비교한다. 앞뒤 공백 제거 후 대소문자를 구분하지 않는 전체 문자열로 비교한다. 등록 파일이 없거나 파싱·형식이 잘못됐거나 이름이 없거나 중복되면 추측하지 않고 사용자에게 확인한다. 명시한 폴더 경로도 등록 정보와 대조한다.
 - 각 항목은 비어 있지 않은 `name`, 문자열 목록 `aliases`, 절대 경로 `path`를 가진다. 서로 다른 프로젝트의 이름과 별칭이 중복되면 안 된다. 등록 정보는 사용자가 지정한 값으로만 관리하며 비밀값을 넣지 않는다. 로컬 등록은 Git에서 제외하고 `projects.example.yaml`은 공유용 예시로 유지한다.
-- 선택한 경로가 존재하는 디렉터리이자 Git 작업 트리의 최상위인지 확인한다. 대상의 `ai-dlc.yaml`이 유효하고 `active_service`가 `services`의 항목을 가리키는지, 해당 작업에 필요한 저장소·Project·명세·브랜치·검증 설정이 있는지 확인한다. 실제 사용할 fetch와 push 원격 및 모든 URL을 확인하고 각각 `repositories.frontend.repository`와 대조한다. 원격이나 경로가 모호하거나 설정과 일치하지 않거나 확인할 수 없으면 중단하고 사용자에게 묻는다. 임의의 폴더 탐색으로 대체하지 않는다.
+- 선택한 경로가 존재하는 디렉터리이자 Git 작업 트리의 최상위인지 확인한다. 대상의 `ai-dlc.yaml`이 유효하고 `active_service`가 `services`의 항목을 가리키는지, 해당 작업에 필요한 저장소·선택된 추적 제공자·명세·브랜치·검증 설정이 있는지 확인한다. 실제 사용할 fetch와 push 원격 및 모든 URL을 확인하고 각각 `repositories.frontend.repository`와 대조한다. 원격이나 경로가 모호하거나 설정과 일치하지 않거나 확인할 수 없으면 중단하고 사용자에게 묻는다. 임의의 폴더 탐색으로 대체하지 않는다.
 - 공통 운영 루트의 AGENTS·Skill·Agent 정의·빠른 지시문·리뷰 기준·템플릿을 사용한다. 프로젝트 설정, `docs/current-task.md`, `docs/current-work-log.md`, `docs/devlog/`, 소스, 테스트와 Git 작업은 대상 프로젝트 루트에서 처리한다. 다른 작업 디렉터리나 worktree는 사용 전에 대상과 경로를 확인한다.
 - 대상의 기존 AGENTS 등 적용되는 로컬 지시도 확인한다. 공통 규칙과 충돌하거나 적용 기준이 불명확하면 어느 쪽도 임의로 무시하거나 덮어쓰지 않고 중단해 사용자에게 보고한다.
 - Issue·PR 작성은 대상 `.github` 템플릿을 우선하고 없으면 공통 `templates/.github`를 참고한다. 자동 복사하거나 기존 파일을 덮어쓰지 않는다. 기록이 없으면 기존 기록과 충돌 여부를 확인한 뒤 공통 기록 템플릿을 참고한다.
@@ -17,13 +17,15 @@
 ## 핵심 규칙
 
 - 사용자는 PM이자 최종 승인자다. 한 번에 하나의 Issue만 진행한다.
-- 작업과 기능 후보는 설정된 GitHub Project에서 관리한다. 프로젝트 비전과 후보 승인 상태는 사용자만 변경하며, 목표일은 사용자가 지정한 경우에만 기록한다.
+- `work_tracking.provider` 생략 또는 `github_projects`일 때 작업과 기능 후보는 설정된 GitHub Project에서 관리한다. 프로젝트 비전과 후보 승인 상태는 사용자만 변경하며, 목표일은 사용자가 지정한 경우에만 기록한다.
 - Issue 작성·확장은 `.github/ISSUE_TEMPLATE`을 참고하고, 요구사항이 불명확하면 사용자에게 확인한다.
 - 구현 기준은 Main이 품질 게이트로 승인한 `docs/current-task.md`이며 범위 밖은 구현하지 않는다. 사용자가 특정 작업에서 이 절차를 생략하도록 지시한 경우 그 승인 범위를 따른다.
 - 사용자가 작업 시작을 지시하면 Main은 지정된 Issue 또는 선정 기준에 따라 선택한 Issue 하나를 품질 게이트와 아래 예외를 지켜 설계·구현·검증하고 PR을 생성한다.
-- Main은 독립적으로 추적할 필요가 확인된 명확한 기술 후속 작업과, 아래 백로그 정제에서 승인된 기능 후보를 전환하는 경우 Issue를 생성할 수 있다. 사용자에게 결정이 필요한 사항은 Issue에 명시하고 `labels.decision` 라벨을 붙여 선정에서 제외한다. 새로운 기능 아이디어는 사용자가 승인하기 전에는 정식 Issue로 만들지 않는다.
-- 사용자가 백로그 정제를 지시하면 `project.fields.approval`이 `project.approval_values.approved`인 Draft 후보에 대해 스킬의 중복·권한·목표 명확성 등 조건을 확인한 후, 최대 2개를 별도 전환 승인 없이 정식 Issue로 전환하고 필요한 본문·라벨·Project 필드를 반영할 수 있다. 세부 사항만 미결정이면 `labels.decision`과 `project.statuses.backlog` 상태로 관리한다. 목표 자체가 불명확하거나 중복·접근 여부를 확인할 수 없으면 전환하지 않는다. 이 권한은 구현이나 인증·인가·DB 변경 승인, 실행 환경의 승인 및 GitHub 보호 규칙을 대신하지 않는다.
-- 사용자 코멘트의 결정이 명확하면 `labels.decision`을 해제한다. 미결정 Issue는 자동 선정에서 제외하고, 사용자가 직접 지정하면 질문한다. 선정된 Issue의 결정 내용과 출처를 Architect에게 전달해 설계에 반영한다. 위에서 허용한 경우 외의 Issue 생성·수정은 사용자 승인 후 진행한다. PR merge는 사용자가 직접 한다.
+- `github_projects`에서 Main은 독립적으로 추적할 필요가 확인된 명확한 기술 후속 작업과, 아래 백로그 정제에서 승인된 기능 후보를 전환하는 경우 Issue를 생성할 수 있다. 사용자에게 결정이 필요한 사항은 Issue에 명시하고 `labels.decision` 라벨을 붙여 선정에서 제외한다. 새로운 기능 아이디어는 사용자가 승인하기 전에는 정식 Issue로 만들지 않는다.
+- `github_projects`에서 사용자가 백로그 정제를 지시하면 `project.fields.approval`이 `project.approval_values.approved`인 Draft 후보에 대해 스킬의 중복·권한·목표 명확성 등 조건을 확인한 후, 최대 2개를 별도 전환 승인 없이 정식 Issue로 전환하고 필요한 본문·라벨·Project 필드를 반영할 수 있다. 세부 사항만 미결정이면 `labels.decision`과 `project.statuses.backlog` 상태로 관리한다. 목표 자체가 불명확하거나 중복·접근 여부를 확인할 수 없으면 전환하지 않는다. 이 권한은 구현이나 인증·인가·DB 변경 승인, 실행 환경의 승인 및 GitHub 보호 규칙을 대신하지 않는다.
+- `github_projects`에서 사용자 코멘트의 결정이 명확하면 `labels.decision`을 해제한다. 미결정 Issue는 자동 선정에서 제외하고, 사용자가 직접 지정하면 질문한다. 선정된 작업의 결정 내용과 출처를 Architect에게 전달해 설계에 반영한다. 위에서 허용한 경우 외의 Issue 생성·수정은 사용자 승인 후 진행한다. PR merge는 사용자가 직접 한다.
+- `work_tracking.provider: jira`에서는 새 작업으로 설정된 Jira 프로젝트의 `jira.issue_types.implementation` Task 중 `jira.statuses.ready`와 `jira.role_labels.frontend`에 해당하는 작업만 선정한다. 같은 Task를 재개할 때는 현재 상태와 기존 PR을 확인해 이어가며 `jira.statuses.in_review`를 `jira.statuses.in_progress`로 되돌리지 않는다. 사용자가 착수 가능 전환과 PR merge를 직접 수행한다. Main은 신규 착수 시 `jira.statuses.in_progress`, 검토 가능한 PR 링크를 Task에 남긴 뒤 `jira.statuses.in_review`로 전환하고 각각 재조회한다. 마무리 요청을 받으면 연결된 PR이 설정된 Frontend 기준 브랜치에 실제 merge됐는지 확인한 후 해당 Task만 `jira.statuses.done`으로 전환하고 재조회한다. Jira 실패 시 GitHub Projects로 대체하지 않는다.
+- Jira 후보 등록·정제·Epic 관리는 Orchestrator에 남긴다. Frontend는 Jira Task 생성·상세화·관계 변경이나 사용자 착수 가능 전환을 수행하지 않는다. Jira의 기존 결정·선행 조건을 확인하고 불명확하면 중단해 보고한다. Jira Automation을 전제로 하거나 설정하지 않는다.
 - 요구사항이 불명확하거나 Issue 범위 확장, DB 구조·인증·인가 변경, 비밀값·API 키·중요 환경 설정 변경, 위험 작업 또는 사용자·팀의 필수 승인이 필요하면 해당 작업을 중단하고 사용자에게 확인한다. 비밀값은 출력하거나 기록하지 않는다.
 - 테스트·CI·리뷰 실패가 수정 한도 내에 해결되지 않거나, 허용된 접근 방법과 기존 인증을 확인한 뒤에도 필요한 근거·권한을 확인할 수 없으면 해당 작업을 중단하고 보고한다. 한 도구의 실패나 거절만으로 다른 허용된 접근 방법까지 확인하지 못한다고 단정하지 않는다. 실행 환경의 승인 및 GitHub 보호 규칙은 그대로 따른다.
 - 예외: 이번 Issue의 작업 브랜치는 PR merge와 미반영 커밋·변경이 없음을 확인한 경우 별도 승인 없이 정리할 수 있다. 확인할 수 없으면 중단한다. 실행 환경의 권한 정책은 별도로 따른다.
@@ -36,7 +38,7 @@
 - `AGENTS.md`, Skill 정의, Agent 설정, `ai-dlc.example.yaml`·`ai-dlc.yaml`, 빠른 지시문·리뷰 기준 등 운영 절차 문서(README.md 제외)와 Issue/PR·기록 템플릿은 AI-DLC 운영 파일이다. 일반 기능 개발·버그 수정·리뷰 대응 중에는 수정하지 않는다. 사용자에게 목적·대상·영향을 보고하고 승인받은 별도 AI-DLC 유지보수 작업에서만 승인 범위 안의 운영 파일을 수정한다. 유지보수에도 기존 승인 조건·품질 게이트·실행 환경 권한을 적용하며, 일반 개발을 임의로 유지보수로 전환하지 않는다.
 - `README.md`는 위 운영 파일 수정 금지 대상에서 제외한다. 일반 개발 사이클에서도 승인된 작업 범위 안에서 수정할 수 있다. README 수정으로 공식 계약·운영 규칙이나 기존 승인 조건을 변경할 수는 없다.
 - `docs/current-task.md`, `docs/current-work-log.md`, `docs/devlog/YYYY-MM.md`와 각 Skill이 명시한 상태 파일은 기존 역할·책임·승인 범위 안에서 수정할 수 있다. 설계의 Main 승인, 이전 devlog 확인, append-only 등 기존 조건을 유지한다. 이 예외는 기록·상태 내용에만 적용하며 Skill 정의·템플릿·운영 규칙을 바꾸는 권한이 아니다.
-- 개발 중 계약 변경 필요성을 발견하면 먼저 기존 공식 계약에 맞춰 승인된 요구사항을 구현할 수 있는지 검토한다. Main은 검토 근거와 대안, 변경 사유·영향 범위·수정안을 사용자에게 보고하고 관련 Issue·PR에 기록한다. Issue 생성·수정의 기존 승인 조건은 유지하며, 수정 승인이 필요하면 기록안을 보고하고 승인 후 반영한다. 계약 변경 없이는 구현할 수 없는 부분은 보류하고, 별도 계약 관리 절차의 결과와 공식 원본 반영을 확인한 뒤 설계 게이트를 다시 판단한다. 세부 절차는 issue-driven-dev의 계약 변경 대응을 따른다.
+- 개발 중 계약 변경 필요성을 발견하면 먼저 기존 공식 계약에 맞춰 승인된 요구사항을 구현할 수 있는지 검토한다. Main은 검토 근거와 대안, 변경 사유·영향 범위·수정안을 사용자에게 보고한다. `github_projects`에서는 관련 Issue·PR에 기록하며 Issue 생성·수정의 기존 승인 조건을 유지하고, 수정 승인이 필요하면 기록안을 보고하고 승인 후 반영한다. `jira`에서는 Jira Task 본문과 댓글을 수정하지 않고 이 내용과 보류 범위를 로컬 `docs/current-work-log.md`에 남긴 뒤 별도 계약 관리 절차를 안내한다. 계약 변경 없이는 구현할 수 없는 부분은 보류하고, 별도 계약 관리 절차의 결과와 공식 원본 반영을 확인한 뒤 설계 게이트를 다시 판단한다. 세부 절차는 issue-driven-dev의 계약 변경 대응을 따른다.
 
 ## 코드 가독성과 구성
 
@@ -65,7 +67,7 @@
 - 역할 설정: `.codex/agents/`의 Architect·Builder·Reporter. Main은 이 문서와 issue-driven-dev에서 정의한다.
 - 리뷰 기준: `docs/review-checklist.md`
 - 임시 작업 기록: `docs/current-work-log.md`
-- 기능 후보와 승인: 설정된 GitHub Project의 Draft Issue
+- 기능 후보와 승인: `github_projects`에서는 설정된 GitHub Project의 Draft Issue, `jira`에서는 Orchestrator 절차
 - 영구 작업 기록: `docs/devlog/YYYY-MM.md`
 - PR 템플릿: 대상 `.github/PULL_REQUEST_TEMPLATE/pull_request_template.md` 우선, 없으면 공통 `templates/.github/PULL_REQUEST_TEMPLATE/pull_request_template.md`
 
