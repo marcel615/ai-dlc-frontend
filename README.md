@@ -2,7 +2,7 @@
 
 **AI-DLC (AI-Driven Development Life Cycle)** 기반의 재사용 가능한 Frontend 개발 자동화 환경이다.
 
-GitHub Issue를 중심으로 AI 에이전트가 설계·구현·리뷰·기록을 수행하고, 사용자가 주요 의사결정과 PR Merge를 담당한다.
+GitHub Issue 또는 Jira 구현 Task를 중심으로 AI 에이전트가 설계·구현·리뷰·기록을 수행하고, 사용자가 주요 의사결정과 PR Merge를 담당한다.
 
 프로젝트별 연결 정보는 `ai-dlc.yaml`로 분리하여 공통 개발 워크플로우를 여러 Frontend 프로젝트에 재사용할 수 있다.
 
@@ -11,7 +11,7 @@ GitHub Issue를 중심으로 AI 에이전트가 설계·구현·리뷰·기록�
 - **Issue 기반 개발:** Issue 분석부터 설계, 구현, 리뷰, PR까지 단계별 진행
 - **역할 분리:** Architect(설계·리뷰), Builder(구현·검증), Reporter(기록)
 - **품질 게이트:** 승인 범위, 빌드·린트·기능 검증, 리뷰, CI 상태 확인
-- **GitHub Projects 연동:** 작업 선정, 우선순위, 사용자 결정 및 진행 상태 관리
+- **작업 추적:** GitHub Projects 또는 Jira의 프론트엔드 구현 Task 선정과 진행 상태 관리
 - **공식 명세 참조:** Specs 저장소의 요구사항·API·인증/인가·ERD·UI 계약을 읽기 전용으로 조회
 - **개발 기록:** 작업 설계, 진행 로그 및 월별 devlog 관리
 - **사용자 승인:** 중요한 결정과 PR Merge는 사용자가 직접 수행
@@ -53,6 +53,8 @@ ai-dlc-frontend/
 이 저장소를 공통 운영 루트로 열고 `projects.example.yaml`을 `projects.local.yaml`로 복사해 프로젝트의 `name`, `aliases`, 절대 `path`를 등록한다. 로컬 등록과 `.idea/`는 Git에서 제외하고 비밀값을 넣지 않는다. 공유 예시에는 실제 로컬 경로를 넣지 않는다.
 
 대상 루트에는 프로젝트별 `ai-dlc.yaml`이 필요하다. 새 설정은 `ai-dlc.example.yaml`을 참고하며 기존 설정이나 작업 기록을 덮어쓰지 않는다. `Ask-Teacher 프로젝트 작업 시작하자`라고 요청하면 Main은 등록 이름·별칭으로 대상을 식별하고 대상 설정·Git 루트와 Frontend 원격을 확인한다. 등록이 없거나 중복되거나 확인할 수 없으면 사용자에게 묻는다. 상세 조건은 공통 `AGENTS.md`를 따른다.
+
+활성 서비스의 `work_tracking.provider`를 생략하면 기존 `github_projects`를 사용한다. `jira`를 지정하면 설정된 Jira 프로젝트의 ready 상태와 프론트엔드 역할 라벨을 가진 구현 Task만 개발한다. 후보 등록·정제·Epic 관리는 Orchestrator가 담당하고, 사용자가 Task를 ready로 옮긴다. Frontend는 착수·PR 검토 상태와 PR 링크를 관리하며, 사용자의 마무리 요청 후 연결 PR의 실제 merge를 확인해 해당 Task만 완료한다. Jira 실패 시 GitHub Projects로 대체하지 않는다. 상세 절차는 `issue-driven-dev`를 따른다.
 
 공통 Skill·Agent·리뷰 기준과 템플릿은 이 저장소에서 읽는다. 프로젝트 설정·소스·현재 설계·작업 로그·월별 devlog·Git·검증은 대상 프로젝트에서 처리한다. 대상 `.github` 템플릿을 우선 사용하고 없으면 공통 템플릿을 참고한다. 기존 프로젝트 파일은 자동 복사하거나 삭제하지 않는다.
 
