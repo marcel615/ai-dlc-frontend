@@ -54,7 +54,7 @@ ai-dlc-frontend/
 
 대상 루트에는 프로젝트별 `ai-dlc.yaml`이 필요하다. 새 설정은 `ai-dlc.example.yaml`을 참고하며 기존 설정이나 작업 기록을 덮어쓰지 않는다. `Ask-Teacher 프로젝트 작업 시작하자`라고 요청하면 Main은 등록 이름·별칭으로 대상을 식별하고 대상 설정·Git 루트와 Frontend 원격을 확인한다. 등록이 없거나 중복되거나 확인할 수 없으면 사용자에게 묻는다. 상세 조건은 공통 `AGENTS.md`를 따른다.
 
-활성 서비스의 `work_tracking.provider`를 생략하면 기존 `github_projects`를 사용한다. `jira`를 지정하면 설정된 Jira 프로젝트의 ready 상태와 프론트엔드 역할 라벨을 가진 구현 Task만 개발한다. 후보 등록·정제·Epic 관리는 Orchestrator가 담당하고, 사용자가 Task를 ready로 옮긴다. Frontend는 착수·PR 검토 상태와 PR 링크를 관리하며, 사용자의 마무리 요청 후 연결 PR의 실제 merge를 확인해 해당 Task만 완료한다. Jira 실패 시 GitHub Projects로 대체하지 않는다. 상세 절차는 `issue-driven-dev`를 따른다.
+활성 서비스의 `work_tracking.provider`를 생략하면 기존 `github_projects`를 사용한다. `jira`를 지정하면 설정된 Jira 프로젝트의 ready 상태와 프론트엔드 역할 라벨을 가진 구현 Task만 새로 착수한다. 같은 Task를 재개할 때는 현재 상태와 기존 PR을 확인하며 검토 상태를 진행 상태로 되돌리지 않는다. 후보 등록·정제·Epic 관리는 Orchestrator가 담당하고, 사용자가 Task를 ready로 옮긴다. Frontend는 착수·PR 검토 상태와 PR 링크를 관리하며, 사용자의 마무리 요청 후 연결 PR의 실제 merge를 확인해 해당 Task만 완료한다. Jira 실패 시 GitHub Projects로 대체하지 않는다. 상세 절차는 `issue-driven-dev`를 따른다.
 
 공통 Skill·Agent·리뷰 기준과 템플릿은 이 저장소에서 읽는다. 프로젝트 설정·소스·현재 설계·작업 로그·월별 devlog·Git·검증은 대상 프로젝트에서 처리한다. 대상 `.github` 템플릿을 우선 사용하고 없으면 공통 템플릿을 참고한다. 기존 프로젝트 파일은 자동 복사하거나 삭제하지 않는다.
 
@@ -93,7 +93,7 @@ ai-dlc-frontend/
 | README.md | 승인된 작업 범위에서 수정 가능 | 공식 계약·운영 규칙·승인 조건 변경 수단으로 사용하지 않음 |
 | 현재 설계·작업 로그·월별 devlog·Skill이 명시한 상태 파일 | 기존 역할·책임·승인 범위에서 수정 가능 | Main 설계 승인·append-only 등 기존 조건 유지 |
 
-계약 변경이 필요해 보이면 기존 계약으로 승인된 요구사항을 구현할 수 있는지 먼저 검토한다. Main은 대안 검토 근거, 변경 사유·영향 범위·수정안을 사용자에게 보고하고 관련 Issue·PR에 기록한다. 기존 Issue 수정 승인 조건은 유지한다. 계약 변경에 의존하는 부분은 보류하고 별도 계약 관리 절차의 공식 원본 반영을 확인한 뒤 설계 게이트를 다시 판단한다. 기능 구현이나 AI-DLC 유지보수 승인만으로 계약을 수정하지 않는다.
+계약 변경이 필요해 보이면 기존 계약으로 승인된 요구사항을 구현할 수 있는지 먼저 검토한다. Main은 대안 검토 근거, 변경 사유·영향 범위·수정안을 사용자에게 보고한다. `github_projects`에서는 기존 승인 조건에 따라 관련 Issue·PR에 기록한다. `jira`에서는 Task 본문·댓글을 수정하지 않고 로컬 작업 로그에 기록하며 별도 계약 관리 절차를 안내한다. 계약 변경에 의존하는 부분은 보류하고 별도 계약 관리 절차의 공식 원본 반영을 확인한 뒤 설계 게이트를 다시 판단한다. 기능 구현이나 AI-DLC 유지보수 승인만으로 계약을 수정하지 않는다.
 
 권한의 기준은 `AGENTS.md`, 상세 대응 절차는 `.agents/skills/issue-driven-dev/SKILL.md`를 따른다.
 
